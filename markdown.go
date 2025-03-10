@@ -69,8 +69,17 @@ var (
 func getSectionType(line string) SectionType {
 	trimmedLine := strings.TrimSpace(line)
 	if strings.HasPrefix(trimmedLine, "#") {
-		sectionType := SectionType(trimmedLine[:strings.Index(trimmedLine, " ")])
-		return sectionType
+
+		sectionType := ""
+		for i := range line {
+			if line[i] == '#' {
+				sectionType += "#"
+				continue
+			}
+			break
+		}
+
+		return SectionType(sectionType)
 	} else {
 		return NullSection
 	}
