@@ -1,4 +1,4 @@
-module github.com/anotherhadi/markdown
+module github.com/JSmith-Aura/markdown
 
 go 1.22.5
 
