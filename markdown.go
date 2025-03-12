@@ -91,6 +91,7 @@ type Section struct {
 	Text         string // The text after the first space (Without the "#..")
 	Lines        []Line
 	originalText string
+	Index        int
 }
 
 type MarkdownFile struct {

@@ -114,6 +114,7 @@ func (md *MarkdownFile) Read() (err error) {
 		}
 	}
 	if currentSection.SectionType != NullSection || len(currentLines) > 0 {
+		currentSection.Index = len(md.Sections)
 		md.Sections = append(md.Sections, currentSection)
 	}
 
