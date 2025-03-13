@@ -3,7 +3,6 @@ package markdown
 import (
 	"bufio"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -45,17 +44,8 @@ func (md *MarkdownFile) readFrontMatter(filename string) (err error) {
 
 // Read reads the markdown file and parses it into sections (also reads the Front Matter)
 func (md *MarkdownFile) Read() (err error) {
-	directory := filepath.Dir(md.Path)
-	filename := filepath.Base(md.Path)
-	currentDir := os.Getenv("PWD")
-	err = os.Chdir(directory)
+	file, err := os.Open(md.Path)
 	if err != nil {
-		return err
-	}
-
-	file, err := os.Open(filename)
-	if err != nil {
-		_ = os.Chdir(currentDir)
 		return err
 	}
 	defer file.Close()
@@ -64,7 +54,7 @@ func (md *MarkdownFile) Read() (err error) {
 	var currentSection Section = Section{SectionType: NullSection}
 	var isFirstLine bool = true
 
-	err = md.readFrontMatter(filename)
+	err = md.readFrontMatter(md.Path)
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -118,10 +108,5 @@ func (md *MarkdownFile) Read() (err error) {
 		md.Sections = append(md.Sections, currentSection)
 	}
 
-	// Go back to the original directory
-	err = os.Chdir(currentDir)
-	if err != nil {
-		return err
-	}
 	return nil
 }
